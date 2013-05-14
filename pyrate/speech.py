@@ -2,7 +2,7 @@
 import sys
 import subprocess
 
-class Pyrate:
+class Pirate:
   def speak(self, english):
     translater = subprocess.Popen('pirate', stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     translater.stdin.write(english.encode("utf8")+"\n")
@@ -10,4 +10,4 @@ class Pyrate:
     return piratese[:-1]
 
 if __name__ == "__main__":
-  print Pyrate().speak(' '.join(sys.argv[1:]))
+  print Pirate().speak(' '.join(sys.argv[1:]))
