@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import re
 from twitter_access import *
+from pirate_filter import *
 
 TWEET_CHARS = 140
 TWEET_TRUNCATE = u'...'
