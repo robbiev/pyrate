@@ -32,46 +32,42 @@ class TweetPirate:
     return pirate_output
 
   def generate_tweet(self, text):
-    replacements = self.parse_tweet(text)
+    replacements = self.find_snippets_to_replace_in_tweet(text)
     piratese = self.to_pirate(text, replacements)
     return piratese if len(piratese) <= TWEET_CHARS else piratese[:TWEET_CHARS - len(TWEET_TRUNCATE)]+TWEET_TRUNCATE
 
-  def parse_tweet(self, text):
+  # no piratese for user names and URLs
+  def find_snippets_to_replace_in_tweet(self, text):
     urls = re.findall(r'(https?://[^\s]+)', text)
     users = re.findall(r'@[a-zA-Z\-_]+', text)
     total = set(urls + users)
     replacements = dict(zip(self.place_holders(len(total)), total))
     return replacements
 
+def process_tweet(pirate, twitter, t):
+  if t.get('text'):
+    tweet = t['text'] 
+    retweet_count = t['retweet_count']
+    reply = t['in_reply_to_user_id']
+    print 'TWEET   ' + tweet
 
-def run():
-  factory = TwitterFactory()
-  twitter = factory.create()
-
-  tweets = twitter.statuses.user_timeline(include_rts=False)
-
-  for t in tweets:
-    print pirate.generate_tweet(t['text'])
+    if retweet_count is 0 and reply is None:
+      tweet = pirate.generate_tweet(t['text'])
+      print 'PIRATE  ' + tweet
+      twitter.statuses.update(status=tweet)
 
 def run_stream():
-  factory = TwitterFactory()
+  config = TwitterAppConfig().get_app_config()
+  factory = TwitterFactory(config)
   twitter = factory.create()
   streamer = factory.create_stream()
-  tweets = streamer.statuses.filter(follow=116276133)
+  tweets = streamer.statuses.filter(follow=config.clone)
   pirate = TweetPirate(Pirate())
-  for t in tweets:
-    if t.get('text'):
-      tweet = t['text'] 
-      retweet_count = t['retweet_count']
-      reply = t['in_reply_to_user_id']
 
-      print tweet
-      print retweet_count
-      print reply
-      if not (retweet_count and reply):
-        tweet = pirate.generate_tweet(t['text'])
-        print tweet
-        twitter.statuses.update(status=tweet)
+  print 'Following %s' % config.clone
+
+  for t in tweets:
+    process_tweet(pirate, twitter, t)
 
 if __name__ == '__main__':
   run_stream()

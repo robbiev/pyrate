@@ -1,3 +1,7 @@
 sudo apt-get install filters
 pip install twitter
-search for data-user-id (HNTweets: 116276133)
+cp pyraterc ~/.pyrate
+  set to clone HNTweets account by default 
+cd pyrate
+./pyrate.py
+follow instructions
