@@ -3,15 +3,15 @@ import re
 from twitter_access import *
 
 TWEET_CHARS = 140
-TWEET_TRUNCATE = '...'
+TWEET_TRUNCATE = u'...'
 
 # anything longer than 140 can be used as a safe placeholder
-PLACE_HOLDER = TWEET_CHARS * '%'
+PLACE_HOLDER = TWEET_CHARS * u'%'
 
-"""
+'''
 Tweet pirate handles not converting
 links and user names to piratese
-"""
+'''
 class TweetPirate:
   def __init__(self, pirate):
     self.pirate = pirate
@@ -50,19 +50,28 @@ def run():
 
   tweets = twitter.statuses.user_timeline(include_rts=False)
 
-  pirate = TweetPirate(Pirate())
-
   for t in tweets:
     print pirate.generate_tweet(t['text'])
 
 def run_stream():
   factory = TwitterFactory()
+  twitter = factory.create()
   streamer = factory.create_stream()
-  tweets = streamer.statuses.sample()
-  pirate = Pirate()
+  tweets = streamer.statuses.filter(follow=116276133)
+  pirate = TweetPirate(Pirate())
   for t in tweets:
     if t.get('text'):
-      print pirate.speak(t['text'])
+      tweet = t['text'] 
+      retweet_count = t['retweet_count']
+      reply = t['in_reply_to_user_id']
 
-if __name__ == "__main__":
-  run()
+      print tweet
+      print retweet_count
+      print reply
+      if not (retweet_count and reply):
+        tweet = pirate.generate_tweet(t['text'])
+        print tweet
+        twitter.statuses.update(status=tweet)
+
+if __name__ == '__main__':
+  run_stream()

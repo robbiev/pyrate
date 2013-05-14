@@ -23,7 +23,3 @@ class TwitterFactory:
 
   def create_stream(self):
     return TwitterStream(auth=self.oauth())
-
-  def rate_limit_status(self, twitter):
-    r = twitter.application.rate_limit_status()
-    print r
