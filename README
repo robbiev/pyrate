@@ -1,9 +1,11 @@
 sudo apt-get install filters
 pip install twitter
 cp pyraterc ~/.pyrate (and edit)
+chmod 600 ~/.pyrate
 cd pyrate
 chmod +x pyrate.py
 ./pyrate.py
 Configure the account to tweet to (follow instructions)
+CTRL-C to quit
 
 WARNING: this will tweet to the twitter account you configure!
