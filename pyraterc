@@ -1,6 +1,6 @@
 [App]
-consumer_key: teXFL6FkI2nE2KeBYWNs1A
-consumer_secret: KdnLaOXH3kQnffcg07UgkT0IFQC9wepvmXmqU2LENo
+consumer_key: yourkey 
+consumer_secret: yoursecret 
 
 [Pirate]
 # HNTweets
