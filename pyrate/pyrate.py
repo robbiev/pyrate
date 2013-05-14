@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import re
 from twitter_access import *
-import httplib
-httplib.HTTPConnection.debuglevel = 1   
 
 # anything longer than 140 can be used as a safe placeholder
 PLACE_HOLDER = 140 * '%'
