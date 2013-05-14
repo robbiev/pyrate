@@ -1,5 +1,8 @@
 import os
+
 from twitter import *
+
+from speech import *
 
 consumer_key = 'teXFL6FkI2nE2KeBYWNs1A'
 consumer_secret = 'KdnLaOXH3kQnffcg07UgkT0IFQC9wepvmXmqU2LENo'
@@ -13,5 +16,7 @@ oauth_token, oauth_secret = read_token_file(my_twitter_creds)
 twitter = Twitter(auth=OAuth(oauth_token, oauth_secret, consumer_key, consumer_secret))
 
 tweets = twitter.statuses.user_timeline()
+pirate = Pyrate()
+
 for t in tweets:
-  print t['text']
+  print pirate.speak(t['text'])
