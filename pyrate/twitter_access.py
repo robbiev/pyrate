@@ -30,15 +30,3 @@ class TwitterCloner:
 
   def clone(self):
     pass
-
-api = TwitterApi()
-
-twitter = api.create()
-#api.rate_limit_status(twitter)
-
-
-tweets = twitter.statuses.user_timeline()
-pirate = Pirate()
-
-for t in tweets:
-  print pirate.speak(t['text'])
