@@ -1,44 +1,66 @@
 #!/usr/bin/env python
 import re
 from twitter_access import *
+import httplib
+httplib.HTTPConnection.debuglevel = 1   
 
-pirate = Pirate()
+# anything longer than 140 can be used as a safe placeholder
 PLACE_HOLDER = 140 * '%'
 
-def place_holders(count):
-  for i in range(0, count):
-    yield PLACE_HOLDER + str(i)
+"""
+Tweet pirate handles not converting
+links and user names to piratese
+"""
+class TweetPirate:
+  def __init__(self, pirate):
+    self.pirate = pirate
 
-# myString = 
-def parse_tweet(text):
-  urls = re.findall(r'(https?://[^\s]+)', text)
-  users = re.findall(r'@[a-zA-Z\-_]+', text)
-  total = set(urls + users)
-  replacements = dict(zip(place_holders(len(total)), total))
+  def place_holders(self, count):
+    for i in range(0, count):
+      yield PLACE_HOLDER + str(i)
 
-  for key, value in replacements.items():
-    text = re.sub(value, key, text)
+  def to_pirate(self, text, replacements):
+    pirate_input = text 
+    for key, value in replacements.items():
+      pirate_input = re.sub(value, key, pirate_input)
 
-  print text
+    pirate_output = self.pirate.speak(pirate_input)
+    for key, value in replacements.items():
+      pirate_output = re.sub(key, value, pirate_output)
 
-  print replacements
+    return pirate_output
+
+  def generate_tweet(self, text):
+    replacements = self.parse_tweet(text)
+    return self.to_pirate(text, replacements)
+
+  def parse_tweet(self, text):
+    urls = re.findall(r'(https?://[^\s]+)', text)
+    users = re.findall(r'@[a-zA-Z\-_]+', text)
+    total = set(urls + users)
+    replacements = dict(zip(self.place_holders(len(total)), total))
+    return replacements
+
 
 def run():
   factory = TwitterFactory()
   twitter = factory.create()
 
-  tweets = twitter.statuses.user_timeline(include_rts=True)
+  tweets = twitter.statuses.user_timeline(include_rts=False)
+
+  pirate = TweetPirate(Pirate())
 
   for t in tweets:
-    print pirate.speak(t['text'])
+    print pirate.generate_tweet(t['text'])
 
 def run_stream():
   factory = TwitterFactory()
   streamer = factory.create_stream()
   tweets = streamer.statuses.sample()
+  pirate = Pirate()
   for t in tweets:
     if t.get('text'):
       print pirate.speak(t['text'])
 
 if __name__ == "__main__":
-  parse_tweet("This is my tweet for @robbiev check it out http://tinyurl.com/blah")
+  run()
