@@ -2,8 +2,11 @@
 import re
 from twitter_access import *
 
+TWEET_CHARS = 140
+TWEET_TRUNCATE = '...'
+
 # anything longer than 140 can be used as a safe placeholder
-PLACE_HOLDER = 140 * '%'
+PLACE_HOLDER = TWEET_CHARS * '%'
 
 """
 Tweet pirate handles not converting
@@ -30,7 +33,8 @@ class TweetPirate:
 
   def generate_tweet(self, text):
     replacements = self.parse_tweet(text)
-    return self.to_pirate(text, replacements)
+    piratese = self.to_pirate(text, replacements)
+    return piratese if len(piratese) <= TWEET_CHARS else piratese[:TWEET_CHARS - len(TWEET_TRUNCATE)]+TWEET_TRUNCATE
 
   def parse_tweet(self, text):
     urls = re.findall(r'(https?://[^\s]+)', text)
