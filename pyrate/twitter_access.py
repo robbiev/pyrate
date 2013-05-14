@@ -1,19 +1,41 @@
 import os
+import time
 
 from twitter import *
 
 from speech import *
 
-consumer_key = 'teXFL6FkI2nE2KeBYWNs1A'
-consumer_secret = 'KdnLaOXH3kQnffcg07UgkT0IFQC9wepvmXmqU2LENo'
+class TwitterApi:
+  def __init__(self):
+    self.consumer_key = 'teXFL6FkI2nE2KeBYWNs1A'
+    self.consumer_secret = 'KdnLaOXH3kQnffcg07UgkT0IFQC9wepvmXmqU2LENo'
+    self.my_twitter_creds = os.path.expanduser('~/.pyrate_credentials')
 
-my_twitter_creds = os.path.expanduser('~/.pyrate_credentials')
-if not os.path.exists(my_twitter_creds):
-  oauth_dance('pyrate', consumer_key, consumer_secret, my_twitter_creds)
+  def create(self):
+    if not os.path.exists(self.my_twitter_creds):
+      oauth_dance('pyrate', self.consumer_key, self.consumer_secret, self.my_twitter_creds)
 
-oauth_token, oauth_secret = read_token_file(my_twitter_creds)
+    oauth_token, oauth_secret = read_token_file(self.my_twitter_creds)
 
-twitter = Twitter(auth=OAuth(oauth_token, oauth_secret, consumer_key, consumer_secret))
+    return Twitter(auth=OAuth(oauth_token, oauth_secret, self.consumer_key,
+      self.consumer_secret))
+
+  def rate_limit_status(self, twitter):
+    r = twitter.application.rate_limit_status()
+    print r
+
+class TwitterCloner:
+  def __init__(self, twitter):
+    self.twitter = twitter
+
+  def clone(self):
+    pass
+
+api = TwitterApi()
+
+twitter = api.create()
+#api.rate_limit_status(twitter)
+
 
 tweets = twitter.statuses.user_timeline()
 pirate = Pirate()
