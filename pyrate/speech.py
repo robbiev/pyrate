@@ -3,7 +3,7 @@ import sys
 import subprocess
 
 class Pyrate:
-  def speak(english):
+  def speak(self, english):
     translater = subprocess.Popen('pirate', stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     translater.stdin.write(english.encode("utf8")+"\n")
     piratese, _ = translater.communicate()
