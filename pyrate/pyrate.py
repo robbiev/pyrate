@@ -34,7 +34,7 @@ class TweetPirate:
   def generate_tweet(self, text):
     replacements = self.find_snippets_to_replace_in_tweet(text)
     piratese = self.to_pirate(text, replacements)
-    return piratese if len(piratese) <= TWEET_CHARS else piratese[:TWEET_CHARS - len(TWEET_TRUNCATE)]+TWEET_TRUNCATE
+    return piratese if len(piratese) <= TWEET_CHARS else piratese[:TWEET_CHARS - len(TWEET_TRUNCATE)] + TWEET_TRUNCATE
 
   # no piratese for user names and URLs
   def find_snippets_to_replace_in_tweet(self, text):

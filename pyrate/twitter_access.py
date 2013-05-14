@@ -4,8 +4,6 @@ import ConfigParser
 
 from twitter import *
 
-from speech import *
-
 class TwitterFactory:
   def __init__(self, config):
     self.config = config 
