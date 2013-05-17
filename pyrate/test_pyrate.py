@@ -28,5 +28,12 @@ class TestTweetPirate(unittest.TestCase):
   def test_eq_140_not_truncated(self):
     self.assertEqual(140*u'a', self.pirate.generate_tweet(140*u'a'))
 
+  def test_unicode(self):
+    self.assertEqual(u'http://\u03AB \u03AB', self.pirate.generate_tweet(u'http://\u03AB \u03AB'))
+
+  def test_pirate_uses_unicode_type(self):
+    self.assertTrue(isinstance(Pirate().speak('hello'), unicode))
+
+
 if __name__ == '__main__':
   unittest.main()
