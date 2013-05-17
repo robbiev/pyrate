@@ -39,7 +39,7 @@ class TweetPirate:
 
   # no piratese for user names and URLs
   def find_snippets_to_replace_in_tweet(self, text):
-    urls = re.findall(r'(https?://[^\s]+)', text)
+    urls = re.findall(r'https?://[^\s]+', text)
     users = re.findall(r'@[a-zA-Z\-_]+', text)
     total = set(urls + users)
     replacements = dict(zip(self.place_holders(len(total)), total))
