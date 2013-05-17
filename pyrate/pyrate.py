@@ -23,11 +23,11 @@ class TweetPirate:
 
   def to_pirate(self, text, replacements):
     pirate_input = text 
-    for key, value in replacements.items():
+    for key, value in replacements:
       pirate_input = re.sub(value, key, pirate_input)
 
     pirate_output = self.pirate.speak(pirate_input)
-    for key, value in replacements.items():
+    for key, value in replacements:
       pirate_output = re.sub(key, value, pirate_output)
 
     return pirate_output
@@ -41,8 +41,9 @@ class TweetPirate:
   def find_snippets_to_replace_in_tweet(self, text):
     urls = re.findall(r'https?://[^\s]+', text)
     users = re.findall(r'@[a-zA-Z\-_]+', text)
-    total = set(urls + users)
-    replacements = dict(zip(self.place_holders(len(total)), total))
+    to_replace = set(urls + users)
+    place_holders = self.place_holders(len(to_replace))
+    replacements = zip(place_holders, to_replace)
     return replacements
 
 def process_tweet(pirate, twitter, t):
