@@ -17,7 +17,7 @@ class TweetPirate:
   def __init__(self, pirate):
     self.pirate = pirate
 
-  def place_holders(self, count):
+  def generate_place_holders(self, count):
     for i in range(0, count):
       yield PLACE_HOLDER + str(i)
 
@@ -42,7 +42,7 @@ class TweetPirate:
     urls = re.findall(r'https?://[^\s]+', text)
     users = re.findall(r'@[a-zA-Z\-_]+', text)
     to_replace = set(urls + users)
-    place_holders = self.place_holders(len(to_replace))
+    place_holders = self.generate_place_holders(len(to_replace))
     replacements = zip(place_holders, to_replace)
     return replacements
 
