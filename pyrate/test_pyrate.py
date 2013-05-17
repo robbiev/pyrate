@@ -1,6 +1,7 @@
+import unittest
+
 from pirate_filter import *
 from pyrate import *
-import unittest
 
 user_tweet = u'hello @robbiev'
 url_tweet = u'I like http://www.google.com'

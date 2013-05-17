@@ -5,15 +5,16 @@ import ConfigParser
 from twitter import *
 
 class TwitterFactory:
+  twitter_creds_location = os.path.expanduser('~/.pyrate_credentials')
+
   def __init__(self, config):
     self.config = config 
-    self.my_twitter_creds = os.path.expanduser('~/.pyrate_credentials')
 
   def oauth(self):
-    if not os.path.exists(self.my_twitter_creds):
-      oauth_dance('pyrate', self.config.consumer_key, self.config.consumer_secret, self.my_twitter_creds)
+    if not os.path.exists(TwitterFactory.twitter_creds_location):
+      oauth_dance('pyrate', self.config.consumer_key, self.config.consumer_secret, TwitterFactory.twitter_creds_location)
 
-    oauth_token, oauth_secret = read_token_file(self.my_twitter_creds)
+    oauth_token, oauth_secret = read_token_file(TwitterFactory.twitter_creds_location)
     return OAuth(oauth_token, oauth_secret, self.config.consumer_key, self.config.consumer_secret)
 
   def create(self):
@@ -23,7 +24,8 @@ class TwitterFactory:
     return TwitterStream(auth=self.oauth())
 
 class TwitterAppConfig:
-  location = os.path.join(os.environ['HOME'], '.pyrate')
+  location = os.path.expanduser('~/.pyrate')
+
   def __init__(self):
     self.config = ConfigParser.ConfigParser() 
 
