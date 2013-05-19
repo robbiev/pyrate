@@ -49,11 +49,12 @@ class TweetPirate:
 def process_tweet(pirate, twitter, t):
   if t.get('text'):
     tweet = t['text'] 
-    retweet_count = t['retweet_count']
     reply = t['in_reply_to_user_id']
+
     print 'TWEET   ' + tweet
 
-    if retweet_count is 0 and reply is None:
+    # exclude retweets and replies
+    if not t.has_key('retweeted_status') and not reply:
       tweet = pirate.generate_tweet(t['text'])
       print 'PIRATE  ' + tweet
       twitter.statuses.update(status=tweet)
